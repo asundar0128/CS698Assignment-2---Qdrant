@@ -6,12 +6,12 @@ if not cap.isOpened():
     exit()
 
 while True:
-    ret, frame = cap.read()
+    ret, generatedFrameValue = cap.read()
     if not ret:
         print("Failed to grab frame")
         break
 
-    cv2.imshow('Camera Test', frame)
+    cv2.imshow('Camera Test', generatedFrameValue)
 
     if cv2.waitKey(1) == ord('q'):
         break
