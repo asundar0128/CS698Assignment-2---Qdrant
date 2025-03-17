@@ -1,17 +1,17 @@
 import cv2
 
-cap = cv2.VideoCapture(0)
-if not cap.isOpened():
-    print("Cannot open camera")
+generatedCapValue = cv2.VideoCapture(0)
+if not generatedCapValue.isOpened():
+    print("The device could not open the respective camera")
     exit()
 
 while True:
-    ret, generatedFrameValue = cap.read()
-    if not ret:
-        print("Failed to grab frame")
+    generatedRetina, generatedFrameValue = generatedCapValue.read()
+    if not generatedRetina:
+        print("The following operation did not grab the proper frame")
         break
 
-    cv2.imshow('Camera Test', generatedFrameValue)
+    cv2.imshow('Generated Camera Test', generatedFrameValue)
 
     if cv2.waitKey(1) == ord('q'):
         break
