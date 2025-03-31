@@ -8,7 +8,6 @@ class generatedCameraPublisher(Node):
     def __init__(self):
         super().__init__('camera_publisher')
         self.publisher_ = self.create_publisher(Image, '/camera/image_raw', 10)
-        self.timer = self.create_timer(0.1, self.timer_callback)
         self.bridge = CvBridge()
 
         # Initialized GStreamer pipeline framework
@@ -17,10 +16,13 @@ class generatedCameraPublisher(Node):
             cv2.CAP_GSTREAMER
         )
 
+        # Properly bind the callback
+        self.timer = self.create_timer(0.1, self.generatedCallbackTimer)
+
     def generatedCallbackTimer(self):
         generatedRetina, generatedFrameValue = self.pipeline.read()
         if generatedRetina:
-            generatedMessageValue = self.bridge.cv2_to_imgmsg(generatedFrameValue, "bgr8")
+            generatedMessageValue = self.bridge.cv2_to_imgmsg(generatedFrameValue, "rgb8")
             self.publisher_.publish(generatedMessageValue)
             self.get_logger().info('Publishing camera frame')
 
