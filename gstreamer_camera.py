@@ -25,7 +25,7 @@ class GStreamerCamera(Node):
             self.get_logger().error('Failed to open GStreamer pipeline')
             exit(1)
 
-        self.timer = self.create_timer(0.05, self.timer_callback)
+        self.timer = self.create_timer(0.05, self.generatedCallbackTimer)
 
     def generatedCallbackTimer(self):
         generatedRetina, generatedFrame = self.cap.read()
@@ -37,12 +37,12 @@ class GStreamerCamera(Node):
 
     def generatedNodeDestruction(self):
         self.cap.release()
-        super().generatedNodeDestruction()
+        super().destroy_node()
 
 def main(args=None):
     rclpy.init(args=args)
     generatedNode = GStreamerCamera()
-    rclpy.spin(node)
+    rclpy.spin(generatedNode)
     generatedNode.generatedNodeDestruction()
     rclpy.shutdown()
 
