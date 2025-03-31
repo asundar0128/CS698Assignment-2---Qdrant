@@ -13,8 +13,8 @@ while True:
 
     cv2.imshow('Generated Camera Test', generatedFrameValue)
 
-    if cv2.waitKey(1) == ord('q'):
+    if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-cap.release()
+generatedCapValue.release()
 cv2.destroyAllWindows()
