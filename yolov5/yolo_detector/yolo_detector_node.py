@@ -11,13 +11,13 @@ class YOLODetectionFunction(Node):
         self.subscription = self.create_subscription(
             Image,
             '/camera/image_raw',
-            self.listener_callback,
+            self.generatedListenerCallback,
             10)
         self.bridge = CvBridge()
         self.model = YOLO('yolov5s.pt')
 
     def generatedListenerCallback(self, generatedMessageValue):
-        generatedCVImage = self.bridge.imgmsg_to_cv2(generatedMessageValue, "bgr8")
+        generatedCVImage = self.bridge.imgmsg_to_cv2(generatedMessageValue, "rgb8")  # match publisher
         generatedResultsValue = self.model(generatedCVImage)
 
         for generatedResultValue in generatedResultsValue:
@@ -27,12 +27,15 @@ class YOLODetectionFunction(Node):
 
             for generatedBoxValue, generatedLabelValue, generatedConfidenceValue in zip(generatedBoxesValue, generatedLabelsValue, generatedConfidencesValue):
                 firstPositionXValue, firstPositionYValue, secondPositionXValue, secondPositionYValue = generatedBoxValue
-                self.get_logger().info(f"Detected {generatedLabelValue} with confidence {generatedConfidenceValue:.2f} at [{ firstPositionXValue}, {firstPositionYValue}, {secondPositionXValue}, {firstPositionYValue}]")
+                self.get_logger().info(
+                    f"Detected {generatedLabelValue} with confidence {generatedConfidenceValue:.2f} at "
+                    f"[{firstPositionXValue}, {firstPositionYValue}, {secondPositionXValue}, {secondPositionYValue}]"
+                )
 
 def main(args=None):
     rclpy.init(args=args)
     generatedNodeValue = YOLODetectionFunction()
-    rclpy.spin(node)
+    rclpy.spin(generatedNodeValue)
     generatedNodeValue.destroy_node()
     rclpy.shutdown()
 
